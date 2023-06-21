@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useReducer } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
@@ -44,6 +44,29 @@ export const CartContext = createContext({
   cartCount: 0,
   cartTotal: 0,
 });
+
+const INITIAL_STATE = {
+  cartCount: 0,
+  cartItems: [],
+  cartTotal: 0,
+  isCartOpen: false,
+};
+
+const cartReducer = (state, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case "SET_CART_ITEMS":
+      return {
+        ...state,
+        ...payload
+      };
+      break;
+    default:
+      throw new Error("Unhandled type of " + type + " in cartReducer.");
+      break;
+  }
+}
 
 export const CartProvider = ({ children }) => {
   const [isCartOpen, setIsCartOpen] = useState(false);
